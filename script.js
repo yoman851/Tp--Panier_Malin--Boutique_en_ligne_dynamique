@@ -179,3 +179,158 @@ function mettreAJourPanier() {
     const montantTotal = document.getElementById("montant-total");
     montantTotal.textContent = `${totalPanier.toFixed(2)}€`;
 }
+
+// ------------------------------------------------
+// D. Validation de Commande (formulaire)
+// ------------------------------------------------
+
+// Ciblage de l'emplacement du formulaire
+const form = document.createElement("form");
+const div = document.getElementById("message-feedback");
+const mailInput = document.getElementById("email-client");
+
+// Création des labels et inputs
+const labelNameInput = document.createElement("label");
+const nameInput = document.createElement("input");
+const labelSurnameInput = document.createElement("label");
+const surnameInput = document.createElement("input");
+const labelAdress = document.createElement("label");
+const AdressInput = document.createElement("input");
+const textAreaLabel = document.createElement("label");
+const textAreaInput = document.createElement("textarea");
+
+// Ajout d'ID
+nameInput.id = "nameInput";
+nameInput.type = "text";
+labelNameInput.setAttribute("for", nameInput.id);
+labelNameInput.textContent = "Votre nom";
+
+surnameInput.id = "surnameInput";
+surnameInput.type = "text";
+labelSurnameInput.setAttribute("for", surnameInput.id);
+labelSurnameInput.textContent = "Votre prénom";
+
+AdressInput.id = "adressInput";
+AdressInput.type = "text";
+labelAdress.setAttribute("for", AdressInput.id);
+labelAdress.textContent = "Votre adresse";
+
+textAreaInput.id = "textAreaInput";
+textAreaLabel.setAttribute("for", textAreaInput.id);
+textAreaLabel.textContent = "Informations supplémentaires";
+
+// Insertion des éléments dans le formulaire
+form.appendChild(labelNameInput);
+form.appendChild(nameInput);
+form.appendChild(labelSurnameInput);
+form.appendChild(surnameInput);
+form.appendChild(labelAdress);
+form.appendChild(AdressInput);
+form.appendChild(textAreaLabel);
+form.appendChild(textAreaInput);
+
+// Insertion du formulaire dans la div cible
+div.appendChild(form);
+
+// Bouton de commande existant dans le HTML
+const submit = document.getElementById("btn-commander");
+
+// Regex email
+const testregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+// Gestion de la soumission (au clic sur le bouton)
+submit.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    let testValid = true;
+
+    resetErrors();
+
+    // Validation du nom
+    if (nameInput.value.trim().length < 3) {
+        displayError(
+            nameInput.id,
+            "Le nom doit contenir au moins 3 caractères.",
+            nameInput
+        );
+        testValid = false;
+    }
+
+    // Validation du prénom
+    if (surnameInput.value.trim().length < 2) {
+        displayError(
+            surnameInput.id,
+            "Le prénom doit contenir au moins 2 caractères.",
+            surnameInput
+        );
+        testValid = false;
+    }
+
+    // Validation de l'email
+    if (!testregex.test(mailInput.value.trim())) {
+        displayError(
+            mailInput.id,
+            "Veuillez entrer une adresse email valide.",
+            mailInput
+        );
+        testValid = false;
+    }
+
+    // Validation de l'adresse
+    if (AdressInput.value.trim().length < 5) {
+        displayError(
+            AdressInput.id,
+            "L'adresse doit contenir au moins 5 caractères.",
+            AdressInput
+        );
+        testValid = false;
+    }
+
+    // Validation du panier (total != 0.00€)
+    const montantTotal =
+        document.getElementById("montant-total").textContent || "0.00€";
+    if (montantTotal === "0.00€") {
+        displayError(
+            submit.id,
+            "Erreur : Votre panier est vide, veuillez sélectionner au minimum 1 article.",
+            submit
+        );
+        testValid = false;
+    }
+
+    if (testValid) {
+        // Message de succès dans le DOM
+        const successMsg = document.createElement("p");
+        successMsg.textContent = "Commande validée avec succès !";
+        successMsg.classList.add("success");
+        div.appendChild(successMsg);
+    }
+});
+
+// Affichage d'un message d'erreur sous l'élément ciblé
+function displayError(elementId, message, inputElement) {
+    const pError = document.createElement("p");
+    pError.textContent = message;
+    pError.classList.add("error");
+    inputElement.classList.add("inputerror");
+
+    const target = document.getElementById(elementId);
+    if (target && target.parentNode) {
+        target.parentNode.insertBefore(pError, target.nextSibling);
+    } else if (target) {
+        target.appendChild(pError);
+    } else {
+        div.appendChild(pError);
+    }
+}
+
+// Réinitialisation des messages d'erreur
+function resetErrors() {
+    const errorElements = document.querySelectorAll(".error");
+    errorElements.forEach((element) => element.remove());
+
+    const inputElements = document.querySelectorAll("input, textarea, button");
+    inputElements.forEach((input) => {
+        input.classList.remove("inputerror");
+    });
+}
