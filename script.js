@@ -91,12 +91,13 @@ function mettreAJourPanier() {
         const message = document.createElement("p");
         message.textContent = "Votre panier est vide.";
         list.appendChild(message);
-        document.getElementById("montant-total").textContent = "0.00€";
+        document.getElementById("montant-total").textContent = "0.00";
         return;
     }
 
     const panierTable = document.createElement("table");
     panierTable.setAttribute("id", "panier-table");
+    panierTable.classList.add("table");
 
     const header = document.createElement("thead");
     const headerRow = document.createElement("tr");
@@ -130,6 +131,7 @@ function mettreAJourPanier() {
     panier.forEach((produit) => {
         const panierLigne = document.createElement("tr");
         panierLigne.setAttribute("id", `panierLigne-${produit.id}`);
+        panierLigne.classList.add("ligne-table");
 
         const panierImage = document.createElement("td");
         const panierImageContent = document.createElement("img");
@@ -177,7 +179,7 @@ function mettreAJourPanier() {
     list.appendChild(panierTable);
 
     const montantTotal = document.getElementById("montant-total");
-    montantTotal.textContent = `${totalPanier.toFixed(2)}€`;
+    montantTotal.textContent = `${totalPanier.toFixed(2)}`;
 }
 
 // ------------------------------------------------
@@ -185,11 +187,11 @@ function mettreAJourPanier() {
 // ------------------------------------------------
 
 // Ciblage de l'emplacement du formulaire
-const form = document.createElement("form");
 const div = document.getElementById("message-feedback");
 const mailInput = document.getElementById("email-client");
 
-// Création des labels et inputs
+// Création du formulaire avec labels et inputs
+const form = document.createElement("form");
 const labelNameInput = document.createElement("label");
 const nameInput = document.createElement("input");
 const labelSurnameInput = document.createElement("label");
@@ -199,21 +201,24 @@ const AdressInput = document.createElement("input");
 const textAreaLabel = document.createElement("label");
 const textAreaInput = document.createElement("textarea");
 
-// Ajout d'ID
+// Ajout d'ID et attributs aux éléments
 nameInput.id = "nameInput";
 nameInput.type = "text";
+nameInput.name = "nameInput";
 labelNameInput.setAttribute("for", nameInput.id);
 labelNameInput.textContent = "Votre nom";
 
 surnameInput.id = "surnameInput";
 surnameInput.type = "text";
+surnameInput.name = "surnameInput";
 labelSurnameInput.setAttribute("for", surnameInput.id);
 labelSurnameInput.textContent = "Votre prénom";
 
 AdressInput.id = "adressInput";
 AdressInput.type = "text";
+AdressInput.name = "adressInput";
 labelAdress.setAttribute("for", AdressInput.id);
-labelAdress.textContent = "Votre adresse";
+labelAdress.textContent = "Adresse de livraison";
 
 textAreaInput.id = "textAreaInput";
 textAreaLabel.setAttribute("for", textAreaInput.id);
@@ -288,8 +293,8 @@ submit.addEventListener("click", function (e) {
 
     // Validation du panier (total != 0.00€)
     const montantTotal =
-        document.getElementById("montant-total").textContent || "0.00€";
-    if (montantTotal === "0.00€") {
+        document.getElementById("montant-total").textContent || "0.00";
+    if (montantTotal === "0.00") {
         displayError(
             submit.id,
             "Erreur : Votre panier est vide, veuillez sélectionner au minimum 1 article.",
@@ -298,12 +303,24 @@ submit.addEventListener("click", function (e) {
         testValid = false;
     }
 
+    // Si tout est valide
     if (testValid) {
-        // Message de succès dans le DOM
-        const successMsg = document.createElement("p");
-        successMsg.textContent = "Commande validée avec succès !";
-        successMsg.classList.add("success");
-        div.appendChild(successMsg);
+        if (!document.querySelector(".success")) {
+            const successMsg = document.createElement("p");
+            successMsg.textContent =
+                "Commande validée avec succès, vous allez recevoir un mail de confirmation.";
+            successMsg.classList.add("success");
+            div.appendChild(successMsg);
+
+            FormDataCollect();
+        } else {
+            document.querySelector(".success").remove("p");
+            const notSuccessMsg = document.createElement("p");
+            notSuccessMsg.textContent =
+                "Une erreur est survenue, votre commande n'est pas passée.";
+            notSuccessMsg.classList.add("not-success");
+            div.appendChild(notSuccessMsg);
+        }
     }
 });
 
@@ -333,4 +350,50 @@ function resetErrors() {
     inputElements.forEach((input) => {
         input.classList.remove("inputerror");
     });
+}
+//récupération des données du formulaire dasn un objet JSON
+function FormDataCollect() {
+    // submit.addEventListener("click", function (event) {
+    //     event.preventDefault();
+
+    const formData = new FormData(form);
+
+    const formValues = {};
+    formData.forEach((value, key) => {
+        formValues[key] = value;
+    });
+    const panierData = panier.map((produit) => ({
+        id: produit.id,
+        nom: produit.nom,
+        prix: produit.prix,
+        quantity: produit.quantity,
+        sousTotal: produit.quantity * produit.prix,
+    }));
+
+    const montantTotal = panierData.reduce(
+        (total, produit) => total + produit.sousTotal,
+        0
+    );
+    const commande = {
+        idCommande: `CMD-${Date.now()}`,
+        client: {
+            nom: formValues.nameInput,
+            prenom: formValues.surnameInput,
+            email: mailInput.value.trim(),
+            adresse: formValues.adressInput,
+            informationsSupplementaires: formValues.textAreaInput,
+        },
+        panier: panierData,
+        montantTotal: montantTotal.toFixed(2),
+    };
+    console.log(commande);
+    setTimeout(() => {
+        form.reset();
+        document.querySelector("#email-client").value = "";
+        document.querySelector(".success").remove("p");
+    }, 1000);
+
+    panier = [];
+    mettreAJourPanier();
+    //     });
 }

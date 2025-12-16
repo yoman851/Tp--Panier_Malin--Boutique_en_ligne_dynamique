@@ -1,34 +1,347 @@
+/* Reset de base */
 * {
-    padding: 0;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
-.grid-produits-cards {
+
+body {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url(image/cafe-italien-bienfaits-naturopathie-sante.webp);
+    background-size: cover;
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: solid 1px black;
-    width: 50%;
-    margin: 10px;
+    justify-content: flex-start;
 }
-.basketButton {
-    width: 48px;
-    height: 32px;
-    border: solid 1px black;
+header {
+    padding: 15px;
+    width: 100%;
     text-align: center;
-    pointer-events: auto;
 }
+
+h1 {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 2rem;
+    color: #f0be86;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Titres secondaires */
+h2,
+h3 {
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 600;
+    color: #f0be86;
+    text-decoration: underline;
+}
+
+p {
+    text-align: center;
+    font-size: 1.2em;
+    color: #e4e3e3;
+}
+
+/* Formulaire */
+form {
+    padding: 15px;
+    margin: 20px 0;
+    width: 90%;
+    max-width: 320px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #6a645a;
+    margin-bottom: 10px;
+    background-color: #f0be86;
+    color: #3d3d3d;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border: 1px solid #c18845;
+}
+
+textarea {
+    min-height: 80px;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #c18845;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #f0be86;
+    color: #3d3d3d;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Panier */
+thead {
+    display: none;
+}
+#panier-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 90%;
+    max-width: 320px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+#panier-liste {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.grid-produits-cards {
+    width: 100%;
+    max-width: 90%;
+    margin: 10px;
+    background-color: #5d7052;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 4px 2px 5px rgba(71, 54, 43, 0.6);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.grid-produits-cards:hover {
+    transform: translateY(-5px);
+}
+
+.grid-produits-cards img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 4px 2px 5px rgba(71, 54, 43, 0.6);
+}
+
+.grid-produits-cards h3 {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #47362b;
+}
+
+.grid-produits-cards p {
+    font-size: 14px;
+    color: #47362b;
+}
+
+.basketButton {
+    padding: 10px 20px;
+    font-size: 14px;
+    background: linear-gradient(45deg, #f0be86, #c18845);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.basketButton:hover {
+    background: linear-gradient(45deg, #c18845, #f0be86);
+}
+
+.basketButton.active {
+    transform: translateY(5px);
+}
+
+/* Tableau du panier */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ligne-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.ligne-table td {
+    padding: 10px;
+}
+
+.ligne-table img {
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+}
+
+.total-section {
+    color: #c18845;
+    font-size: 1.6rem;
+    margin-top: 20px;
+}
+
+/* Erreurs et messages */
 .error {
+    font-size: 12px;
     color: red;
-    font-size: 1em;
-    margin-top: 5px;
+    background-color: #f8d7da;
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 5px;
 }
+
 .inputerror {
-    border: 2px solid #ff0000;
-    box-shadow: 2px 2px 2px 2px #f38a8a;
+    border: 1px solid red;
 }
-.validation {
-    color: #00ff00;
-    font-weight: 700;
-    font-size: 2em;
+
+.success {
+    color: green;
+    font-size: 14px;
+    padding: 8px;
+    background-color: #d4edda;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.not-success {
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    padding: 8px;
+    background-color: #ff0000;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+@media (min-width: 480px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    .grid-produits {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .grid-produits-cards {
+        width: 40%;
+        margin: 10px;
+        padding: 20px;
+    }
+
+    .grid-produits-cards h3 {
+        font-size: 18px;
+    }
+
+    .basketButton {
+        font-size: 16px;
+        padding: 12px 25px;
+    }
+
+    .table {
+        font-size: 16px;
+    }
+    form {
+        max-width: 640px;
+    }
+
+    .total-section {
+        font-size: 1.8rem;
+    }
+    #panier-section {
+        max-width: 640px;
+    }
+}
+
+@media (min-width: 650px) {
+    .grid-produits {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .grid-produits-cards {
+        width: 30%;
+    }
+
+    .basketButton {
+        font-size: 18px;
+        padding: 14px 30px;
+    }
+
+    .table {
+        font-size: 18px;
+    }
+    form {
+        padding: 15px;
+        margin: 20px 0;
+        width: 90%;
+    }
+}
+
+@media (min-width: 1000px) {
+    .grid-produits-cards {
+        width: 22%;
+    }
+
+    .basketButton {
+        font-size: 20px;
+        padding: 16px 35px;
+    }
+    thead {
+        display: table-header-group;
+    }
+    .ligne-table {
+        display: table-row;
+    }
+    .ligne-table img {
+        width: 150px;
+        height: 150px;
+        border-radius: 5px;
+    }
+    .table {
+        max-width: 90%;
+        font-size: 20px;
+    }
+    #panier-section {
+        width: 100%;
+        max-width: 1500px;
+    }
+    form {
+        padding: 15px;
+        margin: 20px 0;
+        width: 90%;
+        max-width: 1220px;
+        align-items: flex-start;
+    }
 }
