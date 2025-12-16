@@ -375,7 +375,7 @@ function FormDataCollect() {
         0
     );
     const commande = {
-        idCommande: `CMD-${Date.now()}`,
+        idCommande: `cmd-${Date.now()}`,
         client: {
             nom: formValues.nameInput,
             prenom: formValues.surnameInput,
