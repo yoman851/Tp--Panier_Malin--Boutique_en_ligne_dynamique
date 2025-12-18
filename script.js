@@ -182,6 +182,75 @@ function mettreAJourPanier() {
     montantTotal.textContent = `${totalPanier.toFixed(2)}`;
 }
 
+// function mettreAJourPanier() {
+//     const list = document.getElementById("panier-liste");
+//     list.innerHTML = "";
+
+//     if (panier.length === 0) {
+//         list.innerHTML = "<p>Votre panier est vide.</p>";
+//         document.getElementById("montant-total").textContent = "0.00";
+//         return;
+//     }
+
+//     // Création du tableau et de l'en-tête
+//     const panierTable = document.createElement("table");
+//     panierTable.setAttribute("id", "panier-table");
+//     panierTable.classList.add("table");
+
+//     const header = document.createElement("thead");
+//     header.innerHTML = `
+//         <tr>
+//             <th></th>
+//             <th>Produit</th>
+//             <th>Prix</th>
+//             <th>Quantité</th>
+//             <th>Sous-total</th>
+//             <th>Supprimer</th>
+//         </tr>
+//     `;
+//     panierTable.appendChild(header);
+
+//     // Corps du tableau
+//     const panierBody = document.createElement("tbody");
+//     let totalPanier = 0;
+
+//     panier.forEach((produit) => {
+//         const sousTotal = produit.quantity * parseFloat(produit.prix);
+//         totalPanier += sousTotal;
+
+//         const panierLigne = document.createElement("tr");
+//         panierLigne.setAttribute("id", `panierLigne-${produit.id}`);
+//         panierLigne.classList.add("ligne-table");
+
+//         panierLigne.innerHTML = `
+//             <td><img src="${produit.image}" alt="${produit.nom}"></td>
+//             <td>${produit.nom}</td>
+//             <td>${produit.prix}€</td>
+//             <td>${produit.quantity}</td>
+//             <td>${sousTotal.toFixed(2)}€</td>
+//             <td>
+//                 <button class="btnSuprimer">Retirer du panier</button>
+//             </td>
+//         `;
+
+//         panierBody.appendChild(panierLigne);
+//     });
+
+//     panierTable.appendChild(panierBody);
+//     list.appendChild(panierTable);
+
+//     // Ajout des écouteurs d'événements
+//     panier.forEach((produit) => {
+//         const btn = document.querySelector(`#panierLigne-${produit.id} .btnSuprimer`);
+//         btn.addEventListener("click", () => {
+//             panier = panier.filter((item) => item.id !== produit.id);
+//             mettreAJourPanier();
+//         });
+//     });
+
+//     document.getElementById("montant-total").textContent = `${totalPanier.toFixed(2)}`;
+// }
+
 // ------------------------------------------------
 // D. Validation de Commande (formulaire)
 // ------------------------------------------------
